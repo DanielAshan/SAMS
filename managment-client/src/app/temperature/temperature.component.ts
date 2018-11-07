@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { Temperature } from 'src/app/shared/temperature.model';
 import { TemperatureService } from './services/temperature.service';
+import { DatePipe } from '@angular/common';
 import 'anychart';
 
 @Component({
@@ -10,7 +11,7 @@ import 'anychart';
 })
 export class TemperatureComponent implements OnInit, AfterViewInit {
 
-  temperatureRecordList: Array<Temperature>;
+  temperatureRecordList: Array<any> = [];
 
   dataSet: anychart.data.Set = anychart.data.set(this.temperatureRecordList);
   mapping: { [key: string ]: anychart.data.View } = {
@@ -22,7 +23,7 @@ export class TemperatureComponent implements OnInit, AfterViewInit {
 
   chart: anychart.charts.Cartesian = null;
 
-  constructor(private temperatureService: TemperatureService) {
+  constructor(private temperatureService: TemperatureService, private datePipe: DatePipe) {
     this.getTemperatureRecords();
    }
 
@@ -30,22 +31,28 @@ export class TemperatureComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.prepareAnychartDataSet();
-    this.chart = anychart.cartesian();
-    this.chart.addSeries(this.getData());
+    this.chart = anychart.line();
+    this.chart.addSeries(this.getData('data'));
+    this.chart.xAxis();
+    this.chart.yAxis();
   }
 
   ngAfterViewInit(): void {
+    this.chart.title('Temperature');
     this.chart.container(this.container.nativeElement);
     this.chart.draw();
   }
 
   getTemperatureRecords(): void {
     this.temperatureService.getTemperatureList().subscribe(data => {
-        this.temperatureRecordList = data;
-        this.dataSet = anychart.data.set(data);
-        console.log(this.dataSet);
+        data.forEach(element => {
+          this.temperatureRecordList.push({
+            x: this.datePipe.transform(element.date, 'yyy-MM-dd: h:mm:ss'),
+            value: element.value
+          });
+        });
+        this.dataSet = anychart.data.set(this.temperatureRecordList);
         this.chart.data(this.dataSet);
-        console.log(this.temperatureRecordList);
     }, error => {
 
     });
@@ -53,16 +60,6 @@ export class TemperatureComponent implements OnInit, AfterViewInit {
 
   prepareAnychartDataSet(): void {
     this.dataSet = anychart.data.set(this.temperatureRecordList);
-  }
-
-  getDataList(): Array<string> {
-    const res: Array<string> = [];
-    for (const key in this.mapping) {
-      if (1) {
-        res.push(key);
-      }
-    }
-    return res;
   }
 
   getData(key: string = 'data') {

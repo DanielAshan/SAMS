@@ -1,6 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
+import {DatePipe} from '@angular/common';
+
 import { AppComponent } from './app.component';
 import { MenuComponent } from './menu/menu.component';
 import { TemperatureComponent } from './temperature/temperature.component';
@@ -17,6 +19,7 @@ import { HttpClientModule } from '@angular/common/http';
     HttpClientModule
   ],
   providers: [
+    DatePipe
   ],
   bootstrap: [AppComponent]
 })
