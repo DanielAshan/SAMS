@@ -14,6 +14,7 @@ export class TemperatureComponent implements OnInit, AfterViewInit {
   temperatureRecordList: Array<any> = [];
 
   dataSet: anychart.data.Set = anychart.data.set(this.temperatureRecordList);
+  dataScale = anychart.scales.dateTime();
   mapping: { [key: string ]: anychart.data.View } = {
     'data': this.dataSet.mapAs({
       x: ['date'],
@@ -34,6 +35,7 @@ export class TemperatureComponent implements OnInit, AfterViewInit {
     this.chart = anychart.line();
     this.chart.addSeries(this.getData('data'));
     this.chart.xAxis();
+    this.chart.xScale(this.dataScale);
     this.chart.yAxis();
   }
 
