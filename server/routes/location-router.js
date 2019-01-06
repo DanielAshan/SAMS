@@ -6,10 +6,11 @@ locationRouter.get('/', function (req, res) {
     Location.find(function (err, result) {
         if (err) {
             res.status(400).send(JSON.stringify(err));
+            return;
         }
         console.log(result);
-        res.send('Location router! \n' + JSON.stringify(result));
-    }); 
+        res.send(JSON.stringify(result));
+    });
 });
 
 locationRouter.get('/generateDummy', function (req, res) {
@@ -26,6 +27,7 @@ locationRouter.get('/generateDummy', function (req, res) {
 locationRouter.post('/', function (req, res) {
     if (req.body.name == null || req.body.name === undefined) {
         res.sendStatus(422);
+        return;
     }
 
     var location = new Location({
@@ -39,9 +41,16 @@ locationRouter.post('/', function (req, res) {
 });
 
 locationRouter.put('/:locationId', function (req, res) {
-    Location.findByIdAndUpdate(req.params.locationId, { name: req.body.name }, function (err, result) {
+    console.log(req.body);
+    if (req.body.name == null || req.body.name === undefined) {
+        res.sendStatus(422);
+        return;
+    }
+    console.log(req.body.name);
+    Location.findOneAndUpdate(req.params.locationId, { name: req.body.name }, function (err, result) {
         if (err) {
             res.status(404).send(JSON.stringify(err));
+            return;
         }
         console.log('Location updated ' + req.params.locationId);
         res.status(204).send(JSON.stringify(result));
@@ -52,6 +61,7 @@ locationRouter.delete('/:locationId', function (req, res) {
     Location.findByIdAndDelete(req.params.locationId, function (err, result) {
         if (err) {
             res.status(404).send(JSON.stringify(err));
+            return;
         }
         console.log('Location deleted ' + req.params.locationId);
         res.sendStatus(204);
