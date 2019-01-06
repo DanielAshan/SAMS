@@ -1,9 +1,16 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-</div>
-<app-menu></app-menu>
-<!-- <app-temperature></app-temperature> -->
-<app-location></app-location>
+<mat-card class="full-card">
+  <mat-card-header>
+      <mat-toolbar color="primary">
+          <mat-toolbar-row>
+            <span>SAMS Web Client</span>
+            <span class="spacer"></span>
+            <p class="link" routerLink="/" routerLinkActive="active">Home Page</p>
+            <p class="link" routerLink="/location" routerLinkActive="active">Location</p>
+          </mat-toolbar-row>
+        </mat-toolbar>       
+  </mat-card-header>
+  <mat-card-content>
+    <router-outlet></router-outlet>
+  </mat-card-content>
+</mat-card>
