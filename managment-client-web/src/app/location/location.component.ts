@@ -44,16 +44,19 @@ export class LocationComponent implements OnInit {
   updateLocation(id): void {
     const dialogRef = this.dialog.open(ChangeLocationNameDialog, {
       width: '250px',
-      data: {id: id, newLocationName: ''}
+      data: { id: id, newLocationName: '' }
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.locationService.updateLocation(result.id, result.newLocationName).subscribe(data => {
-        console.log(data);
-        this.getLocationList();
-      }, error => {
-        console.log(error);
-      });
+      if (result !== undefined) {
+        this.locationService.updateLocation(result.id, result.newLocationName).subscribe(data => {
+          console.log(data);
+          this.getLocationList();
+
+        }, error => {
+          console.log(error);
+        });
+      }
     });
   }
 
@@ -81,7 +84,7 @@ export class LocationComponent implements OnInit {
 export class ChangeLocationNameDialog {
   constructor(
     public dialogRef: MatDialogRef<ChangeLocationNameDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
+    @Inject(MAT_DIALOG_DATA) public data: DialogData) { }
 
   onNoClick(): void {
     this.dialogRef.close();

@@ -1,0 +1,12 @@
+.spacer {
+  flex: 1 1 auto;
+}
+
+.link {
+  padding: 0 14px;
+  cursor: pointer;
+}
+
+::ng-deep .mat-card-header {
+    flex-direction: column !important;
+}
