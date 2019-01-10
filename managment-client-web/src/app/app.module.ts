@@ -17,6 +17,7 @@ import { from } from 'rxjs';
 
 const appRoutes: Routes = [
   { path: 'location', component: LocationComponent },
+  { path: 'temperature', component: TemperatureComponent },
 ];
 
 @NgModule({
