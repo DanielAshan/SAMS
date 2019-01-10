@@ -1,8 +1,8 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { Temperature } from 'src/app/shared/temperature.model';
 import { TemperatureService } from './services/temperature.service';
 import { DatePipe } from '@angular/common';
-import 'anychart';
+import { Chart } from 'chart.js';
 
 @Component({
   selector: 'app-temperature',
@@ -11,60 +11,86 @@ import 'anychart';
 })
 export class TemperatureComponent implements OnInit, AfterViewInit {
 
-  temperatureRecordList: Array<any> = [];
+  temperatureChart: Chart = [];
+  temperatureData: Array<any> = [];
+  temperatureLabels: Array<any> = [];
+  constructor(private temperatureService: TemperatureService, private datePipe: DatePipe,
+    private changeDetectorRef: ChangeDetectorRef) {
 
-  dataSet: anychart.data.Set = anychart.data.set(this.temperatureRecordList);
-  dataScale = anychart.scales.dateTime();
-  mapping: { [key: string ]: anychart.data.View } = {
-    'data': this.dataSet.mapAs({
-      x: ['date'],
-      value: ['value']
-    })
-  };
-
-  chart: anychart.charts.Cartesian = null;
-
-  constructor(private temperatureService: TemperatureService, private datePipe: DatePipe) {
-    this.getTemperatureRecords();
-   }
-
-  @ViewChild('chartContainer') container;
-
-  ngOnInit() {
-    this.prepareAnychartDataSet();
-    this.chart = anychart.line();
-    this.chart.addSeries(this.getData('data'));
-    this.chart.xAxis();
-    this.chart.xScale(this.dataScale);
-    this.chart.yAxis();
   }
 
-  ngAfterViewInit(): void {
-    this.chart.title('Temperature');
-    this.chart.container(this.container.nativeElement);
-    this.chart.draw();
+  ngOnInit() {
+  }
+
+  ngAfterViewInit() {
+    this.temperatureChart = new Chart('temperatureChart', {
+      type: 'line',
+      data: {
+        labels: [],
+        datasets: [{
+          label: 'Sensor One',
+          borderColor: 'rgb(255, 99, 132)',
+          data: [],
+        },
+      ]
+      },
+      options: {
+        responsive: true,
+        title: {
+          display: true,
+          text: 'Temperature Chart'
+        },
+        scales: {
+          xAxes: [{
+            type: 'time',
+            time: {
+              unit: 'second'
+            },
+            scaleLabel: {
+              display: true,
+              labelString: 'Date'
+            }
+          }],
+          yAxes: [{
+            scaleLabel: {
+              display: true,
+              labelString: 'value'
+            }
+          }]
+        }
+      }
+    });
+    this.getTemperatureRecords();
+    this.changeDetectorRef.detectChanges();
+    console.log(this.temperatureChart);
   }
 
   getTemperatureRecords(): void {
     this.temperatureService.getTemperatureList().subscribe(data => {
-        data.forEach(element => {
-          this.temperatureRecordList.push({
-            x: this.datePipe.transform(element.date, 'yyy-MM-dd: h:mm:ss'),
-            value: element.value
-          });
+      data.map(mapData => {
+        console.log(mapData);
+        this.temperatureLabels.push(mapData.name);
+        this.temperatureData.push({
+          x: new Date(mapData.date), // 2013-02-08 09:30:26
+          y: mapData.value,
         });
-        this.dataSet = anychart.data.set(this.temperatureRecordList);
-        this.chart.data(this.dataSet);
+        this.addDataToChart(this.temperatureChart, new Date(mapData.date), {
+          x: new Date(mapData.date),
+          y: mapData.value,
+        });
+      });
+      this.changeDetectorRef.detectChanges();
     }, error => {
-
+      console.log(error);
     });
   }
 
-  prepareAnychartDataSet(): void {
-    this.dataSet = anychart.data.set(this.temperatureRecordList);
+  addDataToChart(chart, label, data): void {
+    chart.data.labels.push(label);
+    chart.data.datasets.forEach((dataset) => {
+      dataset.data.push(data);
+    });
+    chart.update();
   }
 
-  getData(key: string = 'data') {
-    return this.mapping[key];
-  }
 }

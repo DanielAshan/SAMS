@@ -5,6 +5,7 @@ const cors = require('cors');
 
 var bodyParser = require('body-parser');
 var locationRouter = require('./routes/location-router');
+var sensorRouter = require('./routes/sensor-router');
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -13,18 +14,16 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //  routers
 
 app.use('/location', locationRouter);
+app.use('/sensor', sensorRouter);
 
 app.get('/', (req, res) => {
     res.send('Hello World!');
 });
 
 app.post('/temperature', (req, res) => {
-    console.log(req.body);
-    console.log(req.get('Content-Type'));
-    console.log(req.get('Content-Length'));
     var record = new Temperature({
         name: 'Sensor One',
-        date: Date(),
+        date: new Date(),
         value: req.body.temperature
     });
     record.save(function (err, record) {
@@ -37,7 +36,7 @@ app.post('/temperature', (req, res) => {
 app.get('/temperature', (req, res) => {
     var record = new Temperature({
         name: 'Sensor One',
-        date: Date(),
+        date: new Date(),
         value: Math.random() * 10
     });
     record.save(function (err, record) {
