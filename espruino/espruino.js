@@ -7,52 +7,60 @@ wifi.connect("MyNetwork", {password: "MyPassword"}, function(err){
 wifi.getStatus();
 wifi.getIP();
 
-var D4= new Pin("D4");
-var ow = new OneWire(D4);
-var sensor = require("DS18B20").connect(ow);
+// DHT 11
+var temperature;
+var humidity;
+var dht = require("DHT11").connect(NodeMCU.D1);
 
+// DS18B20
+var oneWire = new OneWire(NodeMCU.D2);
+var tempSensor = require("DS18B20").connect(oneWire);
 
-function sendData(temp) {
-    var temperature = {
-    temperature: temp,
-  };
-    var content = JSON.stringify(temperature);
-  var options = {
-    host: '192.168.0.121', // host name
-    port: 8080,            // (optional) port, defaults to 80
-    path: '/temperature',           // path sent to server
-    method: 'POST',
-    headers: { 
-      "Content-Type" : "application/json",
-      "Content-Length": content.length
-    } 
-  };
+// BH1750
+var i2c = new I2C();
+i2c.setup({scl: NodeMCU.D3, sda: NodeMCU.D4 });
+var bh = require("BH1750").connect(i2c);
+bh.start(1);
+
+// MQ-135
+var mq135 = require("MQ135").connect(NodeMCU.A0);
+
+//HC-SR501
+setWatch(function(event) {
+  console.log(event.state);
+  console.log(event.time);
+  console.log(Math.floor(Date.now() / 1000));
+  console.log("Movement detected");
+}, NodeMCU.D5, {repeat:true, edge:"rising"});
+
+// LED Green, Yellow, Red
+var greenLED = true; // D6
+var yellowLED = false; // D7
+var redLED = true; // D8
+
+digitalWrite(NodeMCU.D6, greenLED);
+digitalWrite(NodeMCU.D7, yellowLED);
+digitalWrite(NodeMCU.D8, redLED);
+
+setInterval(function() {
+  greenLED = !greenLED;
+  yellowLED = !yellowLED;
+  redLED = !redLED;
   
-  
-  var req = require("http").request(options, function(res) {
-    
-    console.log('res',res);
-    
-     res.on('error', function(data) {
-      console.log("error> "+data);
-    });
-    
-    res.on('data', function(data) {
-      console.log("HTTP> "+data);
-    });
-    res.on('close', function(data) {
-      console.log("Connection closed");
-    });
+  digitalWrite(NodeMCU.D6, greenLED);
+  digitalWrite(NodeMCU.D7, yellowLED);
+  digitalWrite(NodeMCU.D8, redLED);
+
+  tempSensor.getTemp(function (temp) {
+    console.log('Temp is: ' + temp);
   });
-  
-  req.end(content);  
-  console.log(content);
-  console.log("Request sent"); 
-}
-
- setInterval(function() {
-   sensor.getTemp(function (temp) {
-     sendData(temp);
-     console.log("Temp is "+temp+"°C");
-   });
- }, 10000);
+  console.log('Light level is: ' + bh.read());
+  dht.read(function (sensor) {
+    temperature = sensor.temp.toString();
+    humidity = sensor.rh.toString();
+    console.log("DHT11 temp read is: " + temperature);
+    console.log("DHT11 humidity read is: " + humidity);
+  });
+  mq135.RZERO = mq135.getRZero();
+  console.log("PPM: " + mq135.getCorrectedPPM(temperature, humidity));
+}, 1000);
