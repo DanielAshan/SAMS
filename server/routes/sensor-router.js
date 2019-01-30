@@ -66,7 +66,6 @@ sensorRouter.delete('/:sensorId', function (req, res) {
             res.status(404).send(JSON.stringify(err));
             return;
         }
-        console.log('Sensor deleted ' + req.params.sensorId);
         res.sendStatus(204);
     });
 });
