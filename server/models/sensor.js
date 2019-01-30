@@ -6,9 +6,10 @@ var mongo = require('../services/database');
  * @param {string} ip_addres - IP Adress of the sensor.
  */
 var sensorSchema = mongo.Schema({
-    name: String,
+    sensor_name: String,
     access_key: String,
-    ip_address: String
+    ip_address: String,
+    expireAt: Date
 });
 
 var Sensor = mongo.model('Sensor', sensorSchema);

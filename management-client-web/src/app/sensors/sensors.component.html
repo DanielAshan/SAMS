@@ -1,0 +1,42 @@
+<table mat-table [dataSource]="sensors" class="mat-elevation-z8">
+  <ng-container matColumnDef="_id">
+    <th mat-header-cell *matHeaderCellDef> ID </th>
+    <td mat-cell *matCellDef="let element"> {{element._id}} </td>
+  </ng-container>
+  <ng-container matColumnDef="sensor_name">
+    <th mat-header-cell *matHeaderCellDef> Name </th>
+    <td mat-cell *matCellDef="let element"> {{element.sensor_name}} </td>
+  </ng-container>
+  <ng-container matColumnDef="ip_address">
+    <th mat-header-cell *matHeaderCellDef> IP Address </th>
+    <td mat-cell *matCellDef="let element"> {{element.ip_address}} </td>
+  </ng-container>
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef> Action </th>
+    <td mat-cell *matCellDef="let element" class="actions-row ">
+      <mat-checkbox>
+        <p style="background: red; color: black">
+          Red LED
+        </p>
+      </mat-checkbox>
+      <mat-checkbox>
+        <p style="background: yellow; color: black">
+          Yellow LED
+        </p>
+      </mat-checkbox>
+      <mat-checkbox>
+        <p style="background: green; color: black">
+          Green LED
+        </p>
+      </mat-checkbox>
+      <button mat-raised-button color="primary" (click)="deleteLocation(element._id)">
+        Edit
+      </button>
+      <button mat-raised-button color="warn" (click)="deleteLocation(element._id)">
+        Delete
+      </button>
+    </td>
+  </ng-container>
+  <tr mat-header-row *matHeaderRowDef="sensorsColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: sensorsColumns"></tr>
+</table>

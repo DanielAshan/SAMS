@@ -1,0 +1,21 @@
+table {
+  margin-top: 20px;
+  width: 100%;
+}
+
+::ng-deep .mat-figure {
+  flex-direction: column;
+}
+
+mat-form-field {
+  display: block !important;
+}
+
+form {
+  margin-bottom: 10px;
+}
+
+mat-divider {
+  margin-bottom: 5px;
+  padding-bottom: 5px;
+}

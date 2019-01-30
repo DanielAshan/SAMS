@@ -1,0 +1,18 @@
+<h1 mat-dialog-title>Change name</h1>
+<div mat-dialog-content>
+  <p>Name</p>
+  <mat-form-field>
+    <input matInput [(ngModel)]="data.newLocationName">
+  </mat-form-field>
+  <mat-form-field class="field-width">
+      <mat-select placeholder="Sensor" name="item" [(ngModel)]="data.sensorName">
+          <mat-option *ngFor="let item of data.sensors" [value]="item">
+            {{item}}
+          </mat-option>
+        </mat-select>
+    </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">No Thanks</button>
+  <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Ok</button>
+</div>

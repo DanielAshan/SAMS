@@ -1,0 +1,76 @@
+<h1>Choose data to visualize</h1>
+<form>
+  <mat-checkbox>
+    <p>
+      Temperature
+    </p>
+  </mat-checkbox>
+  <mat-checkbox>
+    <p>
+      Humidity
+    </p>
+  </mat-checkbox>
+  <mat-checkbox>
+    <p>
+      Light Lever
+    </p>
+  </mat-checkbox>
+  <mat-checkbox>
+    <p>
+      Air Quality
+    </p>
+  </mat-checkbox>
+  <mat-form-field>
+    <input matInput [matDatepicker]="start_picker" placeholder="Choose a start date" [formControl]="start_date">
+    <mat-datepicker-toggle matSuffix [for]="start_picker"></mat-datepicker-toggle>
+    <mat-datepicker #start_picker></mat-datepicker>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput [matDatepicker]="end_picker" placeholder="Choose a end date" [formControl]="end_date">
+    <mat-datepicker-toggle matSuffix [for]="end_picker"></mat-datepicker-toggle>
+    <mat-datepicker #end_picker></mat-datepicker>
+  </mat-form-field>
+  <mat-checkbox>
+    <p>
+      Kitchen
+    </p>
+  </mat-checkbox>
+  <mat-checkbox>
+    <p>
+      Bathroom
+    </p>
+  </mat-checkbox>
+  <mat-checkbox>
+    <p>
+      Salon
+    </p>
+  </mat-checkbox>
+  <mat-checkbox>
+    <p>
+      Bedroom
+    </p>
+  </mat-checkbox>
+</form>
+<mat-divider></mat-divider>
+<mat-grid-list cols="2" rowHeight="350px">
+  <mat-grid-tile>
+    <div *ngIf="temperatureChart" class="chart-container">
+      <canvas id="temperatureChart">{{ temperatureChart }}</canvas>
+    </div>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <div *ngIf="humidityChart" class="chart-container">
+      <canvas id="humidityChart">{{ humidityChart }}</canvas>
+    </div>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <div *ngIf="lightLevelChart" class="chart-container">
+      <canvas id="lightLevelChart">{{ lightLevelChart }}</canvas>
+    </div>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <div *ngIf="airQualityChart" class="chart-container">
+      <canvas id="airQualityChart">{{ airQualityChart }}</canvas>
+    </div>
+  </mat-grid-tile>
+</mat-grid-list>

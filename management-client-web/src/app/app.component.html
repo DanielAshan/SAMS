@@ -1,0 +1,19 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<mat-card class="full-card">
+  <mat-card-header>
+      <mat-toolbar color="primary">
+          <mat-toolbar-row>
+            <p class="link" routerLink="/" routerLinkActive="active"><span>SAMS Web Client</span></p>
+            <span class="spacer"></span>
+            <p class="link" routerLink="/locations" routerLinkActive="active">Locations</p>
+            <p class="link" routerLink="/sensors" routerLinkActive="active">Sensors</p>
+            <p class="link" routerLink="/visualisation" routerLinkActive="active">Visualisation</p>
+            <p class="link" routerLink="/analysis" routerLinkActive="active">Analysis</p>
+            <p class="link" routerLink="/feedback" routerLinkActive="active">Feedback</p>
+          </mat-toolbar-row>
+        </mat-toolbar>       
+  </mat-card-header>
+  <mat-card-content>
+    <router-outlet></router-outlet>
+  </mat-card-content>
+</mat-card>

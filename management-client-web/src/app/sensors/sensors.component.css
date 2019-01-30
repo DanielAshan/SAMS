@@ -1,0 +1,10 @@
+table {
+  width: 100%;
+}
+
+.actions-row mat-checkbox {
+  margin-right: 8px;
+}
+.actions-row button {
+    margin-right: 8px;
+  }

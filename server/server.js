@@ -30,7 +30,6 @@ app.post('/temperature', (req, res) => {
         if (err) return console.error(err);
         console.log('Record saved');
     });
-    // res.send(record)
 });
 
 app.get('/temperature', (req, res) => {
@@ -54,7 +53,7 @@ app.get('/tempList', (req, res) => {
 });
 
 app.listen(8080, '0.0.0.0', () => {
-    console.log('Example app listening on port 8080!');
+    console.log('API server listening on adress 0.0.0.0, port 8080!');
 });
 
 // Run app, then load http://localhost:8080 in a browser to see the output.

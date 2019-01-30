@@ -1,0 +1,24 @@
+table,
+.form-width,
+.field-width {
+  width: 95%;
+}
+
+::ng-deep .mat-figure {
+  flex-direction: column;
+}
+
+.grid-header {
+  align-content: center;
+  text-align: center;
+  flex-direction: column;
+  margin: 0;
+}
+
+mat-checkbox {
+  margin-right: 8px;
+}
+
+.actions-row button {
+  margin-right: 8px;
+}

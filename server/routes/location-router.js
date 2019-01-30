@@ -1,9 +1,9 @@
 var express = require('express');
-var Sensor = require('../models/sensor');
-var sensorRouter = express.Router();
+var Location = require('../models/location');
+var locationRouter = express.Router();
 
-sensorRouter.get('/', function (req, res) {
-    Sensor.find(function (err, result) {
+locationRouter.get('/', function (req, res) {
+    Location.find(function (err, result) {
         if (err) {
             res.status(400).send(JSON.stringify(err));
             return;
@@ -13,11 +13,9 @@ sensorRouter.get('/', function (req, res) {
     });
 });
 
-sensorRouter.get('/generateDummy', function (req, res) {
-    var location = new Sensor({
-        name: 'Dummy Sensor',
-        access_key: '1234-5678-9123',
-        ip_address: '192.1.1.1'
+locationRouter.get('/generateDummy', function (req, res) {
+    var location = new Location({
+        name: 'Dummy location'
     });
     location.save(function (err, record) {
         if (err) return console.error(err);
@@ -26,47 +24,48 @@ sensorRouter.get('/generateDummy', function (req, res) {
     });
 });
 
-sensorRouter.post('/', function (req, res) {
+locationRouter.post('/', function (req, res) {
     if (req.body.name == null || req.body.name === undefined) {
         res.sendStatus(422);
         return;
     }
 
-    var sensor = new Sensor({
-        name: req.body.name
+    var location = new Location({
+        name: req.body.name,
+        sensor_name: req.body.sensor_name
     });
-    sensor.save(function (err, record) {
+    location.save(function (err, record) {
         if (err) return console.error(err);
         console.log('Location saved');
-        res.status(201).send(JSON.stringify(sensor));
+        res.status(201).send(JSON.stringify(location));
     });
 });
 
-sensorRouter.put('/:sensorId', function (req, res) {
+locationRouter.put('/:locationId', function (req, res) {
     if (req.body.name == null || req.body.name === undefined) {
         res.sendStatus(422);
         return;
     }
-
-    Sensor.findOneAndUpdate({ _id: req.params.sensorId }, { name: req.body.name }, function (err, result) {
+    console.log(req.body);
+    Location.findOneAndUpdate({ _id: req.params.locationId }, { name: req.body.name, sensor_name: req.body.sensor_name }, function (err, result) {
         if (err) {
             res.status(404).send(JSON.stringify(err));
             return;
         }
-        console.log('Sensor updated ' + req.params.sensorId);
+        console.log('Location updated ' + req.params.locationId);
         res.status(204).send(JSON.stringify(result));
     });
 });
 
-sensorRouter.delete('/:sensorId', function (req, res) {
-    Sensor.findOneAndDelete({ _id: req.params.sensorId }, function (err, result) {
+locationRouter.delete('/:locationId', function (req, res) {
+    Location.findOneAndDelete({ _id: req.params.locationId }, function (err, result) {
         if (err) {
             res.status(404).send(JSON.stringify(err));
             return;
         }
-        console.log('Sensor deleted ' + req.params.sensorId);
+        console.log('Location deleted ' + req.params.locationId);
         res.sendStatus(204);
     });
 });
 
-module.exports = sensorRouter;
+module.exports = locationRouter;

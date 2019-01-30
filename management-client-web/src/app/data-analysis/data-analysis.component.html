@@ -1,0 +1,56 @@
+<h1>Choose data to analyze</h1>
+<form>
+  <mat-form-field>
+    <mat-label>Category</mat-label>
+    <mat-select placeholder="feedback" name="item">
+      <mat-option *ngFor="let item of categories" [value]="item">
+        {{item}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput [matDatepicker]="start_picker" placeholder="Choose a start date" [formControl]="start_date">
+    <mat-datepicker-toggle matSuffix [for]="start_picker"></mat-datepicker-toggle>
+    <mat-datepicker #start_picker></mat-datepicker>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput [matDatepicker]="end_picker" placeholder="Choose a end date" [formControl]="end_date">
+    <mat-datepicker-toggle matSuffix [for]="end_picker"></mat-datepicker-toggle>
+    <mat-datepicker #end_picker></mat-datepicker>
+  </mat-form-field>
+</form>
+<mat-grid-list cols="3">
+  <mat-grid-tile>
+    <mat-card class="example-card">
+      <mat-card-header>
+        <mat-card-title>Temperature</mat-card-title>
+      </mat-card-header>
+      <i class="fas fa-temperature-high fa-7x" style="color: red;"></i>
+      <mat-card-content>
+        <p>The optimal temperature for WORK is between 26.7 and 28.3</p>
+      </mat-card-content>
+    </mat-card>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-card class="example-card">
+      <mat-card-header>
+        <mat-card-title>Humidity</mat-card-title>
+      </mat-card-header>
+      <i class="fas fa-tint fa-7x" style="color: blue;"></i>
+      <mat-card-content>
+          <p>The optimal humidity for WORK is between 40% and 55%</p>
+      </mat-card-content>
+    </mat-card>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-card class="example-card">
+      <mat-card-header>
+        <mat-card-title>Light Level</mat-card-title>
+      </mat-card-header>
+      <i class="fas fa-lightbulb fa-7x" style="color: orange;"></i>
+      <mat-card-content>
+          <p>The optimal light level for WORK is between 2536 lx and 4589 lx</p>
+      </mat-card-content>
+    </mat-card>
+  </mat-grid-tile>
+</mat-grid-list>

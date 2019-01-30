@@ -1,7 +1,8 @@
 var mongo = require('../services/database');
 
 var locationSchema = mongo.Schema({
-    name: String
+    name: String,
+    sensor_name: String
 });
 
 var Location = mongo.model('Location', locationSchema);
