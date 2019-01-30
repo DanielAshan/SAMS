@@ -7,6 +7,9 @@ var locationRouter = require('./routes/location-router');
 var sensorRouter = require('./routes/sensor-router');
 var userFeedbackRouter = require('./routes/user-feedback-router');
 var temperatureRouter = require('./routes/temperature-router');
+var humidityRouter = require('./routes/humidity-router');
+var lightLevelRouter = require('./routes/light-level-router');
+var airQualityRouter = require('./routes/air-quality-router');
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -17,6 +20,9 @@ app.use('/location', locationRouter);
 app.use('/sensor', sensorRouter);
 app.use('/userFeedback', userFeedbackRouter);
 app.use('/temperature', temperatureRouter);
+app.use('/humidity', humidityRouter);
+app.use('/lightLevel', lightLevelRouter);
+app.use('/airQuality', airQualityRouter);
 
 app.get('/', (req, res) => {
     res.send('Hello World!');
