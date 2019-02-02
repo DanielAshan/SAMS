@@ -31,6 +31,16 @@ userFeedbackRouter.post('/', function (req, res) {
     });
 });
 
+userFeedbackRouter.get('/', function (req, res) {
+    if (!req.query.category || !req.query.start_date || !req.query.end_date) {
+        res.sendStatus(400);
+        return;
+    }
+    var category = req.query.category;
+    var startDate = req.query.start_date;
+    var endDate = req.query.end_date;
+});
+
 userFeedbackRouter.delete('/:feedbackId', function (req, res) {
     UserFeedback.findOneAndDelete({ _id: req.params.sensorId }, function (err, result) {
         if (err) {
