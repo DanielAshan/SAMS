@@ -1,6 +1,7 @@
 import { Component, OnInit, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Chart } from 'chart.js';
+import { DataService } from './services/data.service';
 
 @Component({
   selector: 'app-data-visualisation',
@@ -10,143 +11,125 @@ import { Chart } from 'chart.js';
 export class DataVisualisationComponent implements OnInit, AfterViewInit {
   start_date = new FormControl(new Date());
   end_date = new FormControl(new Date());
-  constructor(private changeDetectorRef: ChangeDetectorRef) { }
+  constructor(private dataService: DataService, private changeDetectorRef: ChangeDetectorRef) { }
 
   temperatureChart: Chart = [];
   humidityChart: Chart = [];
   lightLevelChart: Chart = [];
   airQualityChart: Chart = [];
 
-  dataLabels: Date[] = [new Date('10/28/2018'),
-  new Date('12/26/2017'),
-  new Date('10/08/2018'),
-  new Date('10/22/2018'),
-  new Date('04/26/2018'),
-  new Date('05/09/2018'),
-  new Date('05/28/2018'),
-  new Date('09/20/2018'),
-  new Date('01/03/2019'),
-  new Date('01/13/2018')];
+  temperatureData: Array<any> = [];
+  humidityData: Array<any> = [];
+  airQualityData: Array<any> = [];
+  lightLevelData: Array<any> = [];
 
-  temperatureDatasets: Array<any> = [{
-    label: 'Salon',
-    borderColor: 'rgb(255, 99, 132)',
-    data: [{y: 15, x: new Date('10/28/2018')},
-    {y: 16, x: new Date('12/26/2017')},
-    {y: 17, x: new Date('10/08/2018')},
-    {y: 18, x: new Date('10/22/2018')},
-    {y: 18, x: new Date('04/26/2018')},
-    {y: 18, x: new Date('05/09/2018')},
-    {y: 19, x: new Date('05/28/2018')},
-    {y: 17, x: new Date('09/20/2018')},
-    {y: 16, x: new Date('01/03/2019')},
-    {y: 15, x: new Date('01/13/2018')}]
-  }, {
-    label: 'Bedroom',
-    borderColor: 'rgb(3, 255, 132)',
-    data: [{y: 5, x:  new Date('10/28/2018')},
-    {y: 6, x:  new Date('12/26/2017')},
-    {y: 7, x:  new Date('10/08/2018')},
-    {y: 8, x:  new Date('10/22/2018')},
-    {y: 8, x:  new Date('04/26/2018')},
-    {y: 8, x:  new Date('05/09/2018')},
-    {y: 9, x:  new Date('05/28/2018')},
-    {y: 7, x:  new Date('09/20/2018')},
-    {y: 6, x:  new Date('01/03/2019')},
-    {y: 5, x:  new Date('01/13/2018')}]
-  }];
+  dataLabels: Date[] = [];
 
-  humidityDatasets: Array<any> = [{
-    label: 'Salon',
-    borderColor: 'rgb(255, 99, 132)',
-    data: [{y: 15, x: new Date('10/28/2018')},
-    {y: 40, x: new Date('12/26/2017')},
-    {y: 50, x: new Date('10/08/2018')},
-    {y: 52, x: new Date('10/22/2018')},
-    {y: 53, x: new Date('04/26/2018')},
-    {y: 48, x: new Date('05/09/2018')},
-    {y: 59, x: new Date('05/28/2018')},
-    {y: 61, x: new Date('09/20/2018')},
-    {y: 32, x: new Date('01/03/2019')},
-    {y: 30, x: new Date('01/13/2018')}]
-  }, {
-    label: 'Bedroom',
-    borderColor: 'rgb(3, 255, 132)',
-    data: [{y: 5, x:  new Date('10/28/2018')},
-    {y: 26, x:  new Date('12/26/2017')},
-    {y: 37, x:  new Date('10/08/2018')},
-    {y: 48, x:  new Date('10/22/2018')},
-    {y: 48, x:  new Date('04/26/2018')},
-    {y: 58, x:  new Date('05/09/2018')},
-    {y: 39, x:  new Date('05/28/2018')},
-    {y: 27, x:  new Date('09/20/2018')},
-    {y: 36, x:  new Date('01/03/2019')},
-    {y: 55, x:  new Date('01/13/2018')}]
-  }];
+  temperatureDatasets: Array<any> = [];
+  humidityDatasets: Array<any> = [];
 
-  lightLevelDatasets: Array<any> = [{
-    label: 'Salon',
-    borderColor: 'rgb(255, 99, 132)',
-    data: [{y: 3250, x: new Date('10/28/2018')},
-    {y: 2555, x: new Date('12/26/2017')},
-    {y: 4562, x: new Date('10/08/2018')},
-    {y: 2852, x: new Date('10/22/2018')},
-    {y: 5353, x: new Date('04/26/2018')},
-    {y: 1548, x: new Date('05/09/2018')},
-    {y: 1659, x: new Date('05/28/2018')},
-    {y: 5261, x: new Date('09/20/2018')},
-    {y: 332, x: new Date('01/03/2019')},
-    {y: 1830, x: new Date('01/13/2018')}]
-  }, {
-    label: 'Bedroom',
-    borderColor: 'rgb(3, 255, 132)',
-    data: [{y: 5, x:  new Date('10/28/2018')},
-    {y: 126, x:  new Date('12/26/2017')},
-    {y: 5637, x:  new Date('10/08/2018')},
-    {y: 5648, x:  new Date('10/22/2018')},
-    {y: 5648, x:  new Date('04/26/2018')},
-    {y: 258, x:  new Date('05/09/2018')},
-    {y: 2639, x:  new Date('05/28/2018')},
-    {y: 2927, x:  new Date('09/20/2018')},
-    {y: 3536, x:  new Date('01/03/2019')},
-    {y: 4555, x:  new Date('01/13/2018')}]
-  }];
+  lightLevelDatasets: Array<any> = [];
 
-  airQualityDatasets: Array<any> = [{
-    label: 'Salon',
-    borderColor: 'rgb(255, 99, 132)',
-    data: [{y: 420, x: new Date('10/28/2018')},
-    {y: 435, x: new Date('12/26/2017')},
-    {y: 460, x: new Date('10/08/2018')},
-    {y: 390, x: new Date('10/22/2018')},
-    {y: 356, x: new Date('04/26/2018')},
-    {y: 421, x: new Date('05/09/2018')},
-    {y: 401, x: new Date('05/28/2018')},
-    {y: 393, x: new Date('09/20/2018')},
-    {y: 405, x: new Date('01/03/2019')},
-    {y: 408, x: new Date('01/13/2018')}]
-  }, {
-    label: 'Bedroom',
-    borderColor: 'rgb(3, 255, 132)',
-    data: [{y: 420, x:  new Date('10/28/2018')},
-    {y: 420, x:  new Date('12/26/2017')},
-    {y: 390, x:  new Date('10/08/2018')},
-    {y: 578, x:  new Date('10/22/2018')},
-    {y: 451, x:  new Date('04/26/2018')},
-    {y: 431, x:  new Date('05/09/2018')},
-    {y: 386, x:  new Date('05/28/2018')},
-    {y: 357, x:  new Date('09/20/2018')},
-    {y: 336, x:  new Date('01/03/2019')},
-    {y: 455, x:  new Date('01/13/2018')}]
-  }];
+  airQualityDatasets: Array<any> = [];
+
+  getTemperature(): void {
+    this.dataService.getTemperature().subscribe(result => {
+      this.temperatureData = result;
+      result.forEach(item => {
+        this.dataLabels.push(new Date(item.date));
+      });
+      const tempDataset = {
+        label: result[0].sensor_name,
+        borderColor: 'rgb(255, 99, 132)',
+        data: result.map(item => ({
+          y: item.value,
+          x: new Date(item.date)
+        }))
+      };
+      this.temperatureChart.data.labels = this.dataLabels;
+      this.temperatureChart.data.datasets = [tempDataset];
+      console.log(this.temperatureDatasets);
+      console.log(this.dataLabels);
+      console.log(this.temperatureChart);
+      this.temperatureChart.update();
+      this.changeDetectorRef.detectChanges();
+    }, error => {
+      console.log(error);
+    });
+  }
+
+  getHumidity(): void {
+    this.dataService.getHumidity().subscribe(result => {
+      this.humidityData = result;
+      const humidityDataset = {
+        label: result[0].sensor_name,
+        borderColor: 'rgb(255, 99, 132)',
+        data: result.map(item => ({
+          y: item.value,
+          x: new Date(item.date)
+        }))
+      };
+      this.humidityChart.data.labels = this.dataLabels;
+      this.humidityChart.data.datasets = [humidityDataset];
+      this.humidityChart.update();
+      this.changeDetectorRef.detectChanges();
+    }, error => {
+      console.log(error);
+    });
+  }
+
+  getLightLevel(): void {
+    this.dataService.getLightLevel().subscribe(result => {
+      this.lightLevelData = result;
+      const lightLevelDataset = {
+        label: result[0].sensor_name,
+        borderColor: 'rgb(255, 99, 132)',
+        data: result.map(item => ({
+          y: item.value,
+          x: new Date(item.date)
+        }))
+      };
+      this.lightLevelChart.data.labels = this.dataLabels;
+      this.lightLevelChart.data.datasets = [lightLevelDataset];
+      this.lightLevelChart.update();
+      this.changeDetectorRef.detectChanges();
+    }, error => {
+      console.log(error);
+    });
+  }
+
+  getAirQuality(): void {
+    this.dataService.getAirQuality().subscribe(result => {
+      this.airQualityData = result;
+      const airQualityDataset = {
+        label: result[0].sensor_name,
+        borderColor: 'rgb(255, 99, 132)',
+        data: result.map(item => ({
+          y: item.value,
+          x: new Date(item.date)
+        }))
+      };
+      this.airQualityChart.data.labels = this.dataLabels;
+      this.airQualityChart.data.datasets = [airQualityDataset];
+      this.airQualityChart.update();
+      this.changeDetectorRef.detectChanges();
+    }, error => {
+      console.log(error);
+    });
+  }
 
   ngOnInit(): void {
+    this.getTemperature();
+    this.getHumidity();
+    this.getAirQuality();
+    this.getLightLevel();
   }
 
   ngAfterViewInit() {
-    this.dataLabels.sort(function(a: any, b: any) { return a - b; });
+    this.dataLabels.sort(function (a: any, b: any) { return a - b; });
+    console.log(this.temperatureDatasets);
     this.temperatureDatasets.forEach((item) => {
-      item.data.sort(function(a: any, b: any) { return a.x - b.x; });
+      item.data.sort(function (a: any, b: any) { return a.x - b.x; });
     });
     const tempCTX = document.getElementById('temperatureChart');
     const humidityCTX = document.getElementById('humidityChart');
@@ -160,7 +143,12 @@ export class DataVisualisationComponent implements OnInit, AfterViewInit {
         datasets: this.temperatureDatasets.sort()
       },
       options: {
-        responsive: true,
+        animation: {
+          duration: 0
+        },
+        hover: {
+          animationDuration: 0
+        },
         title: {
           display: true,
           text: 'Temperature Chart'
@@ -169,7 +157,7 @@ export class DataVisualisationComponent implements OnInit, AfterViewInit {
           xAxes: [{
             type: 'time',
             time: {
-              unit: 'week'
+              unit: 'day'
             },
             scaleLabel: {
               display: true,
@@ -177,6 +165,9 @@ export class DataVisualisationComponent implements OnInit, AfterViewInit {
             }
           }],
           yAxes: [{
+            ticks: {
+              beginAtZero: true
+            },
             scaleLabel: {
               display: true,
               labelString: 'Celsius Degree'
@@ -187,7 +178,7 @@ export class DataVisualisationComponent implements OnInit, AfterViewInit {
     });
 
     this.humidityDatasets.forEach((item) => {
-      item.data.sort(function(a: any, b: any) { return a.x - b.x; });
+      item.data.sort(function (a: any, b: any) { return a.x - b.x; });
     });
     this.humidityChart = new Chart(humidityCTX, {
       type: 'line',
@@ -205,7 +196,7 @@ export class DataVisualisationComponent implements OnInit, AfterViewInit {
           xAxes: [{
             type: 'time',
             time: {
-              unit: 'week'
+              unit: 'day'
             },
             scaleLabel: {
               display: true,
@@ -213,6 +204,9 @@ export class DataVisualisationComponent implements OnInit, AfterViewInit {
             }
           }],
           yAxes: [{
+            ticks: {
+              beginAtZero: true
+            },
             scaleLabel: {
               display: true,
               labelString: 'Percent %'
@@ -223,7 +217,7 @@ export class DataVisualisationComponent implements OnInit, AfterViewInit {
     });
 
     this.lightLevelDatasets.forEach((item) => {
-      item.data.sort(function(a: any, b: any) { return a.x - b.x; });
+      item.data.sort(function (a: any, b: any) { return a.x - b.x; });
     });
     this.lightLevelChart = new Chart(lightLevelCTX, {
       type: 'line',
@@ -241,7 +235,7 @@ export class DataVisualisationComponent implements OnInit, AfterViewInit {
           xAxes: [{
             type: 'time',
             time: {
-              unit: 'week'
+              unit: 'day'
             },
             scaleLabel: {
               display: true,
@@ -249,6 +243,9 @@ export class DataVisualisationComponent implements OnInit, AfterViewInit {
             }
           }],
           yAxes: [{
+            ticks: {
+              beginAtZero: true
+            },
             scaleLabel: {
               display: true,
               labelString: 'Lux'
@@ -259,7 +256,7 @@ export class DataVisualisationComponent implements OnInit, AfterViewInit {
     });
 
     this.airQualityDatasets.forEach((item) => {
-      item.data.sort(function(a: any, b: any) { return a.x - b.x; });
+      item.data.sort(function (a: any, b: any) { return a.x - b.x; });
     });
     this.airQualityChart = new Chart(airQualityCTX, {
       type: 'line',
@@ -277,7 +274,7 @@ export class DataVisualisationComponent implements OnInit, AfterViewInit {
           xAxes: [{
             type: 'time',
             time: {
-              unit: 'week'
+              unit: 'day'
             },
             scaleLabel: {
               display: true,
@@ -285,6 +282,9 @@ export class DataVisualisationComponent implements OnInit, AfterViewInit {
             }
           }],
           yAxes: [{
+            ticks: {
+              beginAtZero: true
+            },
             scaleLabel: {
               display: true,
               labelString: 'PPM'

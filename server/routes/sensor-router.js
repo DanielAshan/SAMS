@@ -35,22 +35,27 @@ sensorRouter.post('/', function (req, res) {
     }
 
     var sensor = new Sensor({
-        name: req.body.name
+        sensor_name: req.body.name
     });
     sensor.save(function (err, record) {
         if (err) return console.error(err);
-        console.log('Location saved');
+        console.log('sensor saved');
         res.status(201).send(JSON.stringify(sensor));
     });
 });
 
 sensorRouter.put('/:sensorId', function (req, res) {
-    if (req.body.name == null || req.body.name === undefined) {
+    console.log(req.body);
+    if (req.body.sensor_name == null || req.body.sensor_name === undefined) {
         res.sendStatus(422);
         return;
     }
 
-    Sensor.findOneAndUpdate({ _id: req.params.sensorId }, { name: req.body.name }, function (err, result) {
+    Sensor.findOneAndUpdate({ _id: req.params.sensorId }, { sensor_name: req.body.sensor_name,
+        output1: req.body.output1,
+        output2: req.body.output2,
+        output3: req.body.output3
+    }, function (err, result) {
         if (err) {
             res.status(404).send(JSON.stringify(err));
             return;
@@ -73,10 +78,12 @@ sensorRouter.delete('/:sensorId', function (req, res) {
 sensorRouter.get('/register', function (req, res) {
     console.log('Register accessed');
     var sensor = new Sensor({
-        name: 'Sensor ' + req.ip,
+        sensor_name: 'Sensor ' + req.ip,
         ip_address: req.ip,
         access_key: uuid.v4(),
-        expireAt: moment().add('10', 'minutes')
+        output1: false,
+        output2: false,
+        output3: false
     });
     sensor.save(function (err, record) {
         if (err) return console.error(err);

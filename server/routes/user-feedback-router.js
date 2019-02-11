@@ -42,7 +42,7 @@ userFeedbackRouter.get('/', function (req, res) {
 });
 
 userFeedbackRouter.delete('/:feedbackId', function (req, res) {
-    UserFeedback.findOneAndDelete({ _id: req.params.sensorId }, function (err, result) {
+    UserFeedback.findOneAndDelete({ _id: req.params.feedbackId }, function (err, result) {
         if (err) {
             res.status(404).send(JSON.stringify(err));
             return;

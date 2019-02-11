@@ -9,7 +9,6 @@ var sensorSchema = mongo.Schema({
     sensor_name: String,
     access_key: String,
     ip_address: String,
-    expireAt: Date,
     output1: Boolean,
     output2: Boolean,
     output3: Boolean

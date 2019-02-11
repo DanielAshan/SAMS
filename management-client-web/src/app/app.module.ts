@@ -17,7 +17,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { LocationComponent, ChangeLocationNameDialog } from './location/location.component';
 import { from } from 'rxjs';
 import { HomepageComponent } from './homepage/homepage.component';
-import { SensorsComponent } from './sensors/sensors.component';
+import { SensorsComponent, ChangeSensorNameDialog } from './sensors/sensors.component';
 import { DataVisualisationComponent } from './data-visualisation/data-visualisation.component';
 import { DataAnalysisComponent } from './data-analysis/data-analysis.component';
 import { FeedbackComponent } from './feedback/feedback.component';
@@ -39,6 +39,7 @@ const appRoutes: Routes = [
     ChangeLocationNameDialog,
     HomepageComponent,
     SensorsComponent,
+    ChangeSensorNameDialog,
     DataVisualisationComponent,
     DataAnalysisComponent,
     FeedbackComponent
@@ -70,7 +71,8 @@ const appRoutes: Routes = [
     DatePipe
   ],
   entryComponents: [
-    ChangeLocationNameDialog
+    ChangeLocationNameDialog,
+    ChangeSensorNameDialog
   ],
   bootstrap: [AppComponent]
 })

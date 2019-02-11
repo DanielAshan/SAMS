@@ -38,6 +38,7 @@ temperatureRouter.get('/', function (req, res) {
 
 temperatureRouter.post('/', function (req, res) {
     // @todo assign sensor name
+    console.log(req.headers);
     var sensor = 'Sensor One';
     var temperature = new Temperature({
         sensor_name: sensor,

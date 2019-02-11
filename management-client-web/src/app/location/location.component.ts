@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject, ChangeDetectorRef } from '@angular/core';
 import { LocationService } from './services/location.service';
+import { SensorService } from './services/sensor.service';
 import { FormControl } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
@@ -16,13 +17,25 @@ export interface DialogData {
 })
 
 export class LocationComponent implements OnInit {
-  sensors: string[] = ['Sensor A1', 'Sensor A2', 'Sensor B'];
+  sensors: string[] = [];
   name = new FormControl('');
   sensor = new FormControl('');
   locationList: Array<any> = [];
   locationListColumns: string[] = ['name', 'sensor', 'actions'];
-  constructor(private locationService: LocationService, private dialog: MatDialog,
-    private changeDetectorRefs: ChangeDetectorRef) { }
+  constructor(private locationService: LocationService, private sensorService: SensorService,
+    private dialog: MatDialog, private changeDetectorRefs: ChangeDetectorRef) { }
+
+  getSensorList(): void {
+    this.sensorService.getSensorList().subscribe(data => {
+      console.log(data);
+      data.forEach(element => {
+        this.sensors.push(element.sensor_name);
+      });
+      this.changeDetectorRefs.detectChanges();
+    }, error => {
+      console.log(error);
+    });
+  }
 
   getLocationList(): void {
     this.locationService.getLocationList().subscribe(data => {
@@ -73,6 +86,7 @@ export class LocationComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.getSensorList();
     this.getLocationList();
   }
 

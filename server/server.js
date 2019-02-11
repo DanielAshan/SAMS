@@ -24,10 +24,6 @@ app.use('/humidity', humidityRouter);
 app.use('/lightLevel', lightLevelRouter);
 app.use('/airQuality', airQualityRouter);
 
-app.get('/', (req, res) => {
-    res.send('Hello World!');
-});
-
 app.listen(8080, '0.0.0.0', () => {
     console.log('API server listening on adress 0.0.0.0, port 8080!');
 });

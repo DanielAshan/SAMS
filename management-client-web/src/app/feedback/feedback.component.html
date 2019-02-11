@@ -1,17 +1,17 @@
 <h1>Feedback management</h1>
 <form>
   <mat-form-field>
-    <input matInput placeholder="Category name" value="Category">
+    <input matInput placeholder="Category name" value="Category" name="newFeedback.category" [(ngModel)]="newFeedback.category">
   </mat-form-field>
   <mat-form-field>
     <mat-label>Your Feedback</mat-label>
-    <mat-select placeholder="feedback" name="item">
+    <mat-select placeholder="feedback" name="newFeedback.feedback" [(ngModel)]="newFeedback.feedback" >
       <mat-option *ngFor="let item of feedbackOptions" [value]="item.value">
         {{item.viewValue}}
       </mat-option>
     </mat-select>
   </mat-form-field>
-  <button mat-raised-button color="primary" type="submit" (click)="deleteCategory(element._id)">
+  <button mat-raised-button color="primary" type="submit" (click)="submitFeedback()">
     Submit
   </button>
 </form>
@@ -36,7 +36,7 @@
   <ng-container matColumnDef="actions">
     <th mat-header-cell *matHeaderCellDef> Action </th>
     <td mat-cell *matCellDef="let element" class="actions-row ">
-      <button mat-raised-button color="warn" (click)="deleteCategory(element._id)">
+      <button mat-raised-button color="warn" (click)="deleteFeedback(element._id)">
         Delete
       </button>
     </td>

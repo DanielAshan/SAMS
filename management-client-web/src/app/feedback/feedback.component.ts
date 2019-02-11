@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-
+import { FeedbackService } from './services/feedback.service';
 @Component({
   selector: 'app-feedback',
   templateUrl: './feedback.component.html',
@@ -7,19 +7,45 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 })
 export class FeedbackComponent implements OnInit {
 
+  newFeedback = {
+    category: null,
+    feedback: null
+  };
   // _id, category, feedback, date
-  feedback: Array<any> = [{_id: '5c3223809fb67f15698b813e2', category: 'Relax', feedback: 'Good', date: Date()},
-  {_id: '5c3223809fb67f15698b813e2', category: 'Relax', feedback: 'Average', date: Date()},
-  {_id: '5c3223809fb67f15698b813e2', category: 'Work', feedback: 'Good', date: Date()}];
+  feedback: Array<any> = [];
   feedbackColumns: string[] = ['_id', 'category', 'feedback', 'date', 'actions'];
 
   feedbackOptions: Array<any> = [{value: 'good', viewValue: 'Good'},
   {value: 'average', viewValue: 'Average'},
   {value: 'bad', viewValue: 'Bad'}];
-  constructor(private changeDetectorRefs: ChangeDetectorRef) { }
+  constructor(private feedbackService: FeedbackService, private changeDetectorRefs: ChangeDetectorRef) { }
 
+  getFeedbackList(): void {
+    this.feedbackService.getFeedbackList().subscribe(result => {
+      this.feedback = result;
+      this.changeDetectorRefs.detectChanges();
+    }, error => {
+      console.log(error);
+    });
+  }
+
+  submitFeedback(): void {
+    this.feedbackService.createFeedback(this.newFeedback).subscribe(result => {
+      this.getFeedbackList();
+    }, error => {
+      console.log(error);
+    });
+  }
+
+  deleteFeedback(id): void {
+    this.feedbackService.deleteFeedback(id).subscribe(result => {
+      this.getFeedbackList();
+    }, error => {
+      console.log(error);
+    });
+  }
   ngOnInit() {
-    this.changeDetectorRefs.detectChanges();
+    this.getFeedbackList();
   }
 
 }

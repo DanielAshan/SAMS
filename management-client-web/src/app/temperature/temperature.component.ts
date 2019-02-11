@@ -1,5 +1,4 @@
 import { Component, OnInit, AfterViewInit, ChangeDetectorRef } from '@angular/core';
-import { Temperature } from 'src/app/shared/temperature.model';
 import { TemperatureService } from './services/temperature.service';
 import { DatePipe } from '@angular/common';
 import { Chart } from 'chart.js';
@@ -32,7 +31,7 @@ export class TemperatureComponent implements OnInit, AfterViewInit {
           borderColor: 'rgb(255, 99, 132)',
           data: [],
         },
-      ]
+        ]
       },
       options: {
         responsive: true,

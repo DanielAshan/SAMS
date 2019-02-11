@@ -6,6 +6,6 @@ var userFeedbackSchema = mongo.Schema({
     category: String
 });
 
-var UserFeedback = mongo.model('Location', userFeedbackSchema);
+var UserFeedback = mongo.model('UserFeedback', userFeedbackSchema);
 
 module.exports = UserFeedback;
